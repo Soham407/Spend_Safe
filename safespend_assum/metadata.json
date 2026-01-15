@@ -1,0 +1,5 @@
+{
+  "name": "SafeSpend: Assumption-Explicit Clarity",
+  "description": "A manual-first financial tool for freelancers to track safe-to-spend income through explicit assumption-based tracking and confidence degradation.",
+  "requestFramePermissions": []
+}
