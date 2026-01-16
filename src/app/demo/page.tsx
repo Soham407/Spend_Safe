@@ -21,55 +21,41 @@ const MOCK_SNAPSHOT: SnapshotData = {
   pending_count: 2,
   degradation_level: "low",
   oldest_pending_age_days: 12,
-  user_id: "demo-user",
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  income_event_count: 4,
 };
 
 const MOCK_INCOME_EVENTS: IncomeEventData[] = [
   {
     id: "evt_1",
     amount: 2500,
-    source: "Retainer (Monthly)",
     event_date: new Date().toISOString(), // Today
     savings_rate: 0.2,
     state: AssumptionState.CONFIRMED,
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    user_id: "demo-user",
   },
   {
     id: "evt_3",
     amount: 1800,
-    source: "Website Redesign",
     event_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
     savings_rate: 0.3,
     state: AssumptionState.CONFIRMED,
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    user_id: "demo-user",
   },
   {
     id: "evt_2",
     amount: 3000,
-    source: "Project Alpha Milestone",
     event_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
     savings_rate: 0.3,
     state: AssumptionState.PENDING,
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    user_id: "demo-user",
   },
   {
     id: "evt_4",
     amount: 1200,
-    source: "Logo Design",
     event_date: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), // 12 days ago
     savings_rate: 0.1,
     state: AssumptionState.PENDING,
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    user_id: "demo-user",
   },
 ];
 

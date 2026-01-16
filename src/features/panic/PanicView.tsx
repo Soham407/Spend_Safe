@@ -9,18 +9,32 @@ import { PanicSnapshotData } from "../common/types";
 export function PanicView({ refreshTrigger }: { refreshTrigger: number }) {
   const [panicData, setPanicData] = useState<PanicSnapshotData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPanicSnapshot = async () => {
       try {
         setIsLoading(true);
+        setError(null);
         const response = await fetch("/api/panic-snapshot");
+
+        if (!response.ok) {
+          setError(`Failed to load panic snapshot: ${response.statusText}`);
+          setPanicData(null);
+          return;
+        }
+
         const result = await response.json();
         if (result.success) {
           setPanicData(result.data);
+        } else {
+          setError("Failed to load panic snapshot. Please try again.");
+          setPanicData(null);
         }
       } catch (err) {
         console.error("Failed to fetch panic snapshot:", err);
+        setError("Network error. Please check your connection and try again.");
+        setPanicData(null);
       } finally {
         setIsLoading(false);
       }
@@ -29,13 +43,42 @@ export function PanicView({ refreshTrigger }: { refreshTrigger: number }) {
     fetchPanicSnapshot();
   }, [refreshTrigger]);
 
-  if (isLoading || !panicData) {
+  if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto py-8 md:py-16 text-center">
         <RefreshCw className="animate-spin mx-auto text-slate-300" size={48} />
         <p className="text-slate-400 mt-4 font-bold text-sm">
           Loading conservative view...
         </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto py-8 md:py-16 text-center space-y-6">
+        <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto">
+          <ShieldAlert size={32} className="text-rose-500" />
+        </div>
+        <h2 className="text-2xl font-black text-slate-800">
+          Unable to Load Panic View
+        </h2>
+        <p className="text-slate-600 max-w-md mx-auto">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-slate-900 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] shadow-lg"
+        >
+          <RefreshCw size={14} className="inline mr-2" />
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (!panicData) {
+    return (
+      <div className="max-w-4xl mx-auto py-8 md:py-16 text-center">
+        <p className="text-slate-400 font-bold text-sm">No data available</p>
       </div>
     );
   }

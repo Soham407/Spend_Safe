@@ -110,6 +110,24 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000)
 
+### Testing
+
+**Important: Vitest v4 Limitations with Next.js 16**
+
+Vitest v4 **cannot** run tests for async Server Components that use Next.js 16 server-only functions like `cookies()`, `headers()`, `params`, or `searchParams`.
+
+**Test Coverage Guidelines**:
+
+- ✅ **Sync Server Components**: Can be tested with Vitest
+- ✅ **Client Components**: Can be tested with Vitest
+- ❌ **Async Server Components**: Require E2E/integration tests (use Playwright, Cypress, etc.)
+
+This is a known limitation - see https://github.com/vitest-dev/vitest/issues/5862
+
+```bash
+npm test  # Run Vitest unit tests
+```
+
 ### Build for Production
 
 ```bash

@@ -136,14 +136,24 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
-              onClick={() => {
-                const supabase = createClient();
-                supabase.auth.signInWithOAuth({
-                  provider: "google",
-                  options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                  },
-                });
+              onClick={async () => {
+                try {
+                  const { error } = await supabase.auth.signInWithOAuth({
+                    provider: "google",
+                    options: {
+                      redirectTo: `${window.location.origin}/auth/callback`,
+                    },
+                  });
+                  if (error) {
+                    console.error("Google OAuth error:", error);
+                    setError(
+                      "Failed to sign in with Google. Please try again."
+                    );
+                  }
+                } catch (err) {
+                  console.error("Google OAuth error:", err);
+                  setError("Failed to sign in with Google. Please try again.");
+                }
               }}
               className="flex items-center justify-center space-x-2 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-[0.98]"
             >
@@ -152,14 +162,24 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                const supabase = createClient();
-                supabase.auth.signInWithOAuth({
-                  provider: "github",
-                  options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
-                  },
-                });
+              onClick={async () => {
+                try {
+                  const { error } = await supabase.auth.signInWithOAuth({
+                    provider: "github",
+                    options: {
+                      redirectTo: `${window.location.origin}/auth/callback`,
+                    },
+                  });
+                  if (error) {
+                    console.error("GitHub OAuth error:", error);
+                    setError(
+                      "Failed to sign in with GitHub. Please try again."
+                    );
+                  }
+                } catch (err) {
+                  console.error("GitHub OAuth error:", err);
+                  setError("Failed to sign in with GitHub. Please try again.");
+                }
               }}
               className="flex items-center justify-center space-x-2 py-3 bg-white text-slate-600 border border-slate-200 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-[0.98]"
             >

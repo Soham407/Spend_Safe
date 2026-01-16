@@ -24,13 +24,19 @@ export function PassiveModeToggle({
   onToggle,
 }: PassiveModeToggleProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleToggle = async () => {
     setIsUpdating(true);
+    setError(null);
     try {
       await onToggle(!isEnabled);
     } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to toggle passive mode";
+      setError(errorMessage);
       console.error("Failed to toggle passive mode:", err);
+      throw err; // Bubble error to parent if needed
     } finally {
       setIsUpdating(false);
     }
@@ -85,6 +91,9 @@ export function PassiveModeToggle({
               ? COPY.FLOW5.PASSIVE_MODE.TOGGLE_ON
               : COPY.FLOW5.PASSIVE_MODE.TOGGLE_OFF}
           </p>
+          {error && (
+            <p className="text-xs text-rose-500 font-bold mt-2">{error}</p>
+          )}
         </div>
       </div>
 

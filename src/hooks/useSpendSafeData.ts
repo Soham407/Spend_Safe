@@ -40,8 +40,13 @@ export function useSpendSafeData() {
       }
 
       const checkData = await checkRes.json();
-      if (checkData.success && checkData.data.last_check_at) {
-        setLastRealityCheck(new Date(checkData.data.last_check_at).getTime());
+      if (checkData.success && checkData.data.last_reality_check) {
+        setLastRealityCheck(
+          new Date(checkData.data.last_reality_check).getTime()
+        );
+      } else if (checkData.success && !checkData.data.last_reality_check) {
+        // Clear stale data when the field is missing
+        setLastRealityCheck(null);
       }
 
       const settingsData = await settingsRes.json();
