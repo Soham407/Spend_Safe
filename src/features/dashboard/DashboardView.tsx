@@ -1,15 +1,15 @@
 "use client";
 
-import { SafeToSpendCard } from "@/ui/components/SafeToSpendCard";
+import { SafeToSpendCard } from "@/features/estimates/components/SafeToSpendCard";
 import {
   PendingActionsSection,
   RecentExecutionSection,
-} from "@/ui/allocations/AllocationList";
+} from "@/features/assumptions/components/AllocationList";
 import { COPY } from "@/copy/en";
 import { IncomeEventData, SnapshotData } from "../common/types";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 
-import { PendingAllocationData } from "@/ui/allocations/AllocationList"; // Ensure this import is available or type is exported
+import { PendingAllocationData } from "@/features/assumptions/components/AllocationList"; // Ensure this import is available or type is exported
 
 interface DashboardViewProps {
   snapshot: SnapshotData | null;

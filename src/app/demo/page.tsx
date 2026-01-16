@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/ui/components/Sidebar";
-import { IconRail } from "@/ui/components/IconRail";
-import { MobileNav } from "@/ui/components/MobileNav";
+import { Sidebar } from "@/components/Sidebar";
+import { IconRail } from "@/components/IconRail";
+import { MobileNav } from "@/components/MobileNav";
 import { DashboardView } from "@/features/dashboard/DashboardView";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 import { IncomeEventData, SnapshotData } from "@/features/common/types";
-import { PendingAllocationData } from "@/ui/allocations/AllocationList";
+import { PendingAllocationData } from "@/features/assumptions/components/AllocationList";
 import { AlertTriangle, Info } from "lucide-react";
 import Link from "next/link";
 

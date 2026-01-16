@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Wallet, ChevronRight } from "lucide-react";
 import { COPY } from "@/copy/en";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 
 interface PendingAllocationData {
   assumption: {

@@ -34,7 +34,6 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const {
     register,
@@ -48,6 +47,7 @@ export default function SignupPage() {
     setIsLoading(true);
     setError(null);
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -116,6 +116,7 @@ export default function SignupPage() {
           type="button"
           onClick={async () => {
             try {
+              const supabase = createClient();
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
@@ -139,6 +140,7 @@ export default function SignupPage() {
           type="button"
           onClick={async () => {
             try {
+              const supabase = createClient();
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: "github",
                 options: {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AllocationCard, HistoryItem } from "./AllocationCard";
 import { Target, History } from "lucide-react";
 import { COPY } from "@/copy/en";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 
 export interface PendingAllocationData {
   assumption: {

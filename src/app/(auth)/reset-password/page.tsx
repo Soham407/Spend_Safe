@@ -24,7 +24,6 @@ export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
 
   const {
     register,
@@ -38,6 +37,7 @@ export default function ResetPasswordPage() {
     setIsLoading(true);
     setError(null);
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
         redirectTo: `${window.location.origin}/auth/callback?next=/update-password`,
       });

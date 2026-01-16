@@ -29,7 +29,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const {
     register,
@@ -44,6 +43,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
@@ -72,6 +72,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -138,6 +139,7 @@ export default function LoginPage() {
               type="button"
               onClick={async () => {
                 try {
+                  const supabase = createClient();
                   const { error } = await supabase.auth.signInWithOAuth({
                     provider: "google",
                     options: {
@@ -164,6 +166,7 @@ export default function LoginPage() {
               type="button"
               onClick={async () => {
                 try {
+                  const supabase = createClient();
                   const { error } = await supabase.auth.signInWithOAuth({
                     provider: "github",
                     options: {

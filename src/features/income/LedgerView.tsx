@@ -1,6 +1,6 @@
 "use client";
 
-import { IncomeCapture } from "@/ui/income/IncomeCapture";
+import { IncomeCapture } from "./components/IncomeCapture";
 import { COPY } from "@/copy/en";
 import { Library } from "lucide-react";
 import { IncomeEventData } from "../common/types";

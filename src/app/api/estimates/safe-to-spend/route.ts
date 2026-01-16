@@ -2,8 +2,8 @@
 // TRD Section 3: Calculate safe-to-spend estimate
 
 import { NextResponse } from "next/server";
-import { getIncomeEventsWithAssumptions } from "@/domain/income/actions";
-import { calculateSafeToSpend } from "@/domain/estimates/calculator";
+import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
+import { calculateSafeToSpend } from "@/features/estimates/calculator";
 
 export async function GET() {
   try {

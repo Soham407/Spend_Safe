@@ -2,9 +2,9 @@
 // PRD Flow 1: Manual Income Capture
 
 import { NextRequest, NextResponse } from "next/server";
-import { createIncomeEvent } from "@/domain/income/actions";
-import { calculateSafeToSpend } from "@/domain/estimates/calculator";
-import { getIncomeEventsWithAssumptions } from "@/domain/income/actions";
+import { createIncomeEvent } from "@/features/income/actions";
+import { calculateSafeToSpend } from "@/features/estimates/calculator";
+import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
 import { z } from "zod";
 
 export async function GET() {

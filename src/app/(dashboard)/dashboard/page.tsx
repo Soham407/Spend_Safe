@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sidebar } from "@/ui/components/Sidebar";
-import { IconRail } from "@/ui/components/IconRail";
-import { IncomeModal } from "@/ui/components/IncomeModal";
-import { RealityCheckModal } from "@/ui/components/RealityCheckModal";
-import { MobileNav } from "@/ui/components/MobileNav";
+import { Sidebar } from "@/components/Sidebar";
+import { IconRail } from "@/components/IconRail";
+import { IncomeModal } from "@/features/income/components/IncomeModal";
+import { RealityCheckModal } from "@/features/assumptions/components/RealityCheckModal";
+import { MobileNav } from "@/components/MobileNav";
 import { DashboardView } from "@/features/dashboard/DashboardView";
-import { LedgerView } from "@/features/ledger/LedgerView";
+import { LedgerView } from "@/features/income/LedgerView";
 import { PanicView } from "@/features/panic/PanicView";
 import { ProfileView } from "@/features/profile/ProfileView";
 import { HistoryView } from "@/features/history/HistoryView";

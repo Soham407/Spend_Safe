@@ -3,15 +3,15 @@
 // PRD Section 3.4: Panic Button Flow
 
 import { NextResponse } from "next/server";
-import { getIncomeEventsWithAssumptions } from "@/domain/income/actions";
-import { calculatePanicSnapshot } from "@/domain/estimates/panicSnapshot";
+import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
+import { calculatePanicSnapshot } from "@/features/estimates/panicSnapshot";
 
 /**
  * GET /api/panic-snapshot
- * 
+ *
  * Returns a conservative snapshot of safe-to-spend with clear separation
  * of confirmed vs pending/deferred allocations.
- * 
+ *
  * TRD: "Panic mode reframes existing data; it does not invent scenarios"
  */
 export async function GET() {

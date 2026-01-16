@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PassiveModeToggle } from "@/ui/settings/PassiveModeToggle";
-import { AccountSettingsModal } from "@/ui/settings/AccountSettingsModal";
+import { PassiveModeToggle } from "@/features/settings/components/PassiveModeToggle";
+import { AccountSettingsModal } from "@/features/settings/components/AccountSettingsModal";
 import { UserCircle, Target, Clock, Settings } from "lucide-react";
 import { COPY } from "@/copy/en";
 import { createClient } from "@/lib/supabase/client";
