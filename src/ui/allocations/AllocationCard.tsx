@@ -17,9 +17,9 @@ interface PendingAllocationData {
   income_event: {
     id: string;
     user_id: string;
-    amount: number;
+    amount: string | number;
     event_date: Date;
-    savings_rate: number;
+    savings_rate: string | number;
     created_at: Date;
     updated_at: Date;
   };
@@ -28,9 +28,16 @@ interface PendingAllocationData {
 interface AllocationCardProps {
   allocation: PendingAllocationData;
   onUpdate: () => void;
+  isPassiveMode?: boolean;
+  isDemoMode?: boolean;
 }
 
-export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
+export function AllocationCard({
+  allocation,
+  onUpdate,
+  isPassiveMode = false,
+  isDemoMode = false,
+}: AllocationCardProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { assumption, income_event } = allocation;
@@ -38,16 +45,25 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
   const handleAction = async (newState: AssumptionState) => {
     setIsUpdating(true);
     try {
-      const response = await fetch(`/api/assumptions/${assumption.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ state: newState }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || "Failed to update");
+      if (isDemoMode) {
+        // Simulate network delay
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        alert(
+          `This is a demo! In the real app, this would mark the income as ${newState}.`
+        );
+        onUpdate(); // Trigger refresh to verify UI updates if needed (though locally driven)
+      } else {
+        const response = await fetch(`/api/assumptions/${assumption.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ state: newState }),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Failed to update");
+        }
+        onUpdate();
       }
-      onUpdate();
     } catch (err) {
       console.error(err);
     } finally {
@@ -55,7 +71,15 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
     }
   };
 
-  const safeToSpend = income_event.amount * (1 - income_event.savings_rate);
+  const incomeAmount =
+    typeof income_event.amount === "string"
+      ? parseFloat(income_event.amount)
+      : income_event.amount;
+  const savingsRate =
+    typeof income_event.savings_rate === "string"
+      ? parseFloat(income_event.savings_rate)
+      : income_event.savings_rate;
+  const safeToSpend = incomeAmount * (1 - savingsRate);
 
   // Calculate age in days
   const ageDays = Math.floor(
@@ -76,7 +100,7 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
         <div>
           <div className="flex items-center space-x-2 mb-1">
             <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
-              {new Date(income_event.event_date).toLocaleDateString()}
+              {new Date(income_event.event_date).toLocaleDateString("en-US")}
             </p>
             {ageDays > 0 && (
               <span
@@ -87,7 +111,7 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
             )}
           </div>
           <p className="text-2xl font-black text-slate-800 tracking-tighter">
-            ${income_event.amount.toLocaleString()}
+            ${incomeAmount.toLocaleString()}
           </p>
         </div>
         <div className="flex flex-col items-end">
@@ -99,22 +123,30 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
           </p>
         </div>
       </div>
-      <div className="flex items-center space-x-3">
-        <button
-          onClick={() => handleAction(AssumptionState.CONFIRMED)}
-          disabled={isUpdating}
-          className="flex-1 py-2.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 shadow-lg shadow-emerald-200 transition-all disabled:opacity-50"
-        >
-          {isUpdating ? "..." : "Execute"}
-        </button>
-        <button
-          onClick={() => handleAction(AssumptionState.DEFERRED)}
-          disabled={isUpdating}
-          className="flex-1 py-2.5 neo-outset text-amber-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white border border-amber-100 transition-all disabled:opacity-50"
-        >
-          {isUpdating ? "..." : "Defer"}
-        </button>
-      </div>
+      {isPassiveMode ? (
+        <div className="neo-inset px-4 py-3 rounded-xl bg-slate-50/50 border border-white/20">
+          <p className="text-[10px] text-slate-500 font-medium text-center italic">
+            {COPY.FLOW5.DASHBOARD.PENDING_VIEW_ONLY}
+          </p>
+        </div>
+      ) : (
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => handleAction(AssumptionState.CONFIRMED)}
+            disabled={isUpdating}
+            className="flex-1 py-2.5 bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 shadow-lg shadow-emerald-200 transition-all disabled:opacity-50"
+          >
+            {isUpdating ? "..." : "Execute"}
+          </button>
+          <button
+            onClick={() => handleAction(AssumptionState.DEFERRED)}
+            disabled={isUpdating}
+            className="flex-1 py-2.5 neo-outset text-amber-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white border border-amber-100 transition-all disabled:opacity-50"
+          >
+            {isUpdating ? "..." : "Defer"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -123,7 +155,7 @@ export function AllocationCard({ allocation, onUpdate }: AllocationCardProps) {
 interface HistoryItemProps {
   event: {
     id: string;
-    amount: number;
+    amount: string | number;
     event_date: Date;
     state: AssumptionState;
   };
@@ -144,10 +176,14 @@ export function HistoryItem({ event }: HistoryItemProps) {
         </div>
         <div>
           <p className="text-[13px] font-black text-slate-700 tracking-tight">
-            ${event.amount.toLocaleString()}
+            $
+            {(typeof event.amount === "string"
+              ? parseFloat(event.amount)
+              : event.amount
+            ).toLocaleString()}
           </p>
           <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">
-            {new Date(event.event_date).toLocaleDateString()}
+            {new Date(event.event_date).toLocaleDateString("en-US")}
           </p>
         </div>
       </div>

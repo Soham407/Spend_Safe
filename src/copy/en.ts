@@ -19,6 +19,16 @@ export const COPY = {
   STATE_CONFIRMED: "You Confirmed This",
   STATE_DEFERRED: "You Deferred This",
 
+  INCOME_HISTORY: {
+    TITLE: "Income Ledger",
+    SUBTITLE: "Record of all earnings and assumptions",
+  },
+
+  PROFILE: {
+    TITLE: "Profile & Preferences",
+    SUBTITLE: "Global Assumption Settings",
+  },
+
   // Action Buttons
   ACTION_CONFIRM: "I Did It",
   ACTION_DEFER: "I Can't Right Now",
@@ -73,7 +83,7 @@ export const COPY = {
       CALCULATION_TIME: "Calculated {time}",
     },
   },
-  
+
   // Flow 2: Assumed Allocation Confirmation
   FLOW2: {
     ALLOCATION_PROMPT: {
@@ -141,7 +151,8 @@ export const COPY = {
       RELIABILITY_BADGE: "Unconfirmed",
       DESCRIPTION:
         "This amount depends on pending allocations you haven't confirmed yet.",
-      COUNT_LABEL: "{count} {count, plural, =1 {allocation} other {allocations}} pending",
+      COUNT_LABEL:
+        "{count} {count, plural, =1 {allocation} other {allocations}} pending",
     },
     DEFERRED_SECTION: {
       TITLE: "Deferred Allocations",
@@ -149,7 +160,8 @@ export const COPY = {
       RELIABILITY_BADGE: "Explicitly Deferred",
       DESCRIPTION:
         "These allocations were deferred. The estimates assume you'll complete them.",
-      COUNT_LABEL: "{count} {count, plural, =1 {allocation} other {allocations}} deferred",
+      COUNT_LABEL:
+        "{count} {count, plural, =1 {allocation} other {allocations}} deferred",
     },
     BREAKDOWN: {
       TITLE: "Allocation Breakdown",
@@ -187,5 +199,36 @@ export const COPY = {
         "There's no penalty for pending or deferred allocations. This tool simply shows you where things stand.",
     },
   },
-} as const;
 
+  // Flow 5: Read-Only / Passive Mode
+  // PRD: "No penalties or shaming"
+  // TRD: "System remains fully useful without confirmations"
+  FLOW5: {
+    PASSIVE_MODE: {
+      TITLE: "Passive Mode",
+      LABEL: "View-Only Mode",
+      DESCRIPTION:
+        "View estimates without confirming allocations. No penalties, no pressure.",
+      TOGGLE_ON: "Passive Mode Enabled",
+      TOGGLE_OFF: "Passive Mode Disabled",
+      EXPLANATION:
+        "In passive mode, you can see all estimates and pending allocations without being prompted to confirm them. The product remains fully functional for viewing your financial assumptions.",
+      NO_JUDGMENT:
+        "This is your choice. You can enable or disable this at any time.",
+      BENEFITS: {
+        TITLE: "What This Means",
+        VIEW_ONLY: "View all estimates and calculations",
+        NO_PROMPTS: "No confirmation prompts or pressure",
+        FULL_ACCESS: "Full access to all features and data",
+        YOUR_PACE: "Work at your own pace, when ready",
+      },
+    },
+    DASHBOARD: {
+      PASSIVE_INDICATOR: "Viewing in Passive Mode",
+      PASSIVE_MESSAGE:
+        "You're viewing estimates without confirmation prompts. You can change this in your profile settings.",
+      PENDING_VIEW_ONLY:
+        "These allocations are pending. Enable active mode in settings to confirm them.",
+    },
+  },
+} as const;

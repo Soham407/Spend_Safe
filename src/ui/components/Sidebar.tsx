@@ -1,6 +1,12 @@
 "use client";
 
-import { LayoutDashboard, Library, ShieldAlert, UserCircle, History } from "lucide-react";
+import {
+  LayoutDashboard,
+  Library,
+  ShieldAlert,
+  UserCircle,
+  History,
+} from "lucide-react";
 
 interface SidebarProps {
   activeTab: string;
@@ -9,11 +15,22 @@ interface SidebarProps {
   userName: string;
 }
 
-export function Sidebar({ activeTab, setActiveTab, counts, userName }: SidebarProps) {
+export function Sidebar({
+  activeTab,
+  setActiveTab,
+  counts,
+  userName,
+}: SidebarProps) {
   const navItems = [
     { id: "dashboard", label: "Overview", icon: LayoutDashboard, count: null },
     { id: "income", label: "Ledger", icon: Library, count: null },
-    { id: "panic", label: "Panic", icon: ShieldAlert, count: null, accent: "rose" },
+    {
+      id: "panic",
+      label: "Panic",
+      icon: ShieldAlert,
+      count: null,
+      accent: "rose",
+    },
     { id: "history", label: "History", icon: History, count: null },
   ];
 
@@ -21,7 +38,9 @@ export function Sidebar({ activeTab, setActiveTab, counts, userName }: SidebarPr
     <aside className="hidden md:flex flex-col w-[280px] h-full py-8 px-6 space-y-8">
       {/* Logo / Brand */}
       <div className="space-y-1">
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight">SpendSafe</h1>
+        <h1 className="text-2xl font-black text-slate-800 tracking-tight">
+          SpendSafe
+        </h1>
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           Assumption-First Finance
         </p>
@@ -37,9 +56,7 @@ export function Sidebar({ activeTab, setActiveTab, counts, userName }: SidebarPr
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center space-x-4 px-5 py-4 rounded-2xl transition-all group ${
-                isActive
-                  ? "active-item"
-                  : "hover:bg-white/50"
+                isActive ? "active-item" : "hover:bg-white/50"
               }`}
             >
               <div
@@ -85,7 +102,6 @@ export function Sidebar({ activeTab, setActiveTab, counts, userName }: SidebarPr
         </div>
       )}
 
-      {/* Profile Quick Access */}
       <button
         onClick={() => setActiveTab("profile")}
         className={`flex items-center space-x-4 px-5 py-4 rounded-2xl transition-all ${
@@ -95,11 +111,11 @@ export function Sidebar({ activeTab, setActiveTab, counts, userName }: SidebarPr
         <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center">
           <UserCircle className="text-white" size={18} />
         </div>
-        <div className="text-left">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+        <div className="text-left overflow-hidden">
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest truncate">
             Profile
           </p>
-          <p className="text-sm font-black text-slate-800 tracking-tight">
+          <p className="text-sm font-black text-slate-800 tracking-tight truncate max-w-[140px]">
             {userName}
           </p>
         </div>
