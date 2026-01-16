@@ -10,7 +10,7 @@ let client: SupabaseClient | null = null;
  * Uses singleton pattern to prevent multiple client instances.
  */
 export function createClient() {
-  // Validate environment variables
+  // Get environment variables
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 

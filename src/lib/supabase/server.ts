@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
  * Use this in Server Components, Server Actions, and Route Handlers.
  */
 export async function createClient() {
-  // Validate environment variables
+  const cookieStore = await cookies();
+
+  // Get environment variables with runtime validation
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -17,8 +19,6 @@ export async function createClient() {
         "See .env.example for reference."
     );
   }
-
-  const cookieStore = await cookies();
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
