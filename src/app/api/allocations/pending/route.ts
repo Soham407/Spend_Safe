@@ -1,6 +1,5 @@
-
 import { NextResponse } from "next/server";
-import { getPendingAllocations } from "@/domain/assumptions/actions";
+import { getPendingAllocations } from "@/features/assumptions/actions";
 
 export async function GET() {
   try {

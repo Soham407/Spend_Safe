@@ -1,7 +1,6 @@
-
 import { NextRequest, NextResponse } from "next/server";
-import { updateAssumptionState } from "@/domain/assumptions/actions";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { updateAssumptionState } from "@/features/assumptions/actions";
+import { AssumptionState } from "@/features/assumptions/types";
 import { z } from "zod";
 
 const updateSchema = z.object({

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ShieldAlert, RefreshCw, Sparkles } from "lucide-react";
 import { COPY } from "@/copy/en";
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 import { PanicSnapshotData } from "../common/types";
 
 export function PanicView({ refreshTrigger }: { refreshTrigger: number }) {

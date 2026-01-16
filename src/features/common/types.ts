@@ -1,4 +1,4 @@
-import { AssumptionState } from "@/domain/assumptions/types";
+import { AssumptionState } from "@/features/assumptions/types";
 
 export interface IncomeEventData {
   id: string;

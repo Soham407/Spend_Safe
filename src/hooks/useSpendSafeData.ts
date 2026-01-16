@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { IncomeEventData, SnapshotData } from "@/features/common/types";
-import { shouldTriggerRealityCheck } from "@/domain/assumptions/degradation";
+import { shouldTriggerRealityCheck } from "@/features/assumptions/degradation";
 
 export function useSpendSafeData() {
   const [snapshot, setSnapshot] = useState<SnapshotData | null>(null);
