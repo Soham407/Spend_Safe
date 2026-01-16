@@ -21,31 +21,36 @@ export const metadata: Metadata = {
   authors: [{ name: "SpendSafe Team" }],
   creator: "SpendSafe",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://spendsafe.app"
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://spendsafe.app",
+    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     title: "SpendSafe | Financial Clarity Without the Guesswork",
     description:
       "Stop wondering if you can afford it. Separate cash from assumptions.",
     siteName: "SpendSafe",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "SpendSafe Dashboard Preview",
-      },
-    ],
+    // Note: Add og-image.png to /public directory for social media previews
+    // images: [
+    //   {
+    //     url: "/og-image.png",
+    //     width: 1200,
+    //     height: 630,
+    //     alt: "SpendSafe Dashboard Preview",
+    //   },
+    // ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SpendSafe | Panic-Proof Freelance Finance",
     description: "Know your true safe-to-spend number instantly.",
-    images: ["/og-image.png"],
+    // images: ["/og-image.png"],
     creator: "@spendsafe",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

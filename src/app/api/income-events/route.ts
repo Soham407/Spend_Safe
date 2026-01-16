@@ -2,6 +2,7 @@
 // PRD Flow 1: Manual Income Capture
 
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { createIncomeEvent } from "@/features/income/actions";
 import { calculateSafeToSpend } from "@/features/estimates/calculator";
 import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
@@ -9,6 +10,19 @@ import { z } from "zod";
 
 export async function GET() {
   try {
+    // Authenticate user
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     const allEvents = await getIncomeEventsWithAssumptions();
 
     const data = allEvents.map((e) => ({
@@ -35,6 +49,20 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
 
     const createIncomeSchema = z.object({

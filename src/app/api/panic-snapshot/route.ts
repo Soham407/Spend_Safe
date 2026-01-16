@@ -3,6 +3,7 @@
 // PRD Section 3.4: Panic Button Flow
 
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
 import { calculatePanicSnapshot } from "@/features/estimates/panicSnapshot";
 
@@ -16,6 +17,19 @@ import { calculatePanicSnapshot } from "@/features/estimates/panicSnapshot";
  */
 export async function GET() {
   try {
+    // Authenticate user
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     // Fetch all income events with assumptions
     const allEvents = await getIncomeEventsWithAssumptions();
 

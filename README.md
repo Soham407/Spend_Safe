@@ -135,6 +135,57 @@ npm run build
 npm run start
 ```
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+SpendSafe is optimized for deployment on [Vercel](https://vercel.com):
+
+1. **Push to GitHub/GitLab/Bitbucket**
+
+   ```bash
+   git push origin main
+   ```
+
+2. **Import to Vercel**
+
+   - Go to https://vercel.com/new
+   - Import your repository
+   - Vercel auto-detects Next.js configuration
+
+3. **Configure Environment Variables**
+
+   Add these in Vercel dashboard (**Settings** → **Environment Variables**):
+
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
+   ```
+
+4. **Deploy**
+
+   - Click **Deploy**
+   - Vercel builds and deploys automatically
+
+5. **Post-Deployment**
+   - Update Supabase redirect URLs to include your Vercel domain
+   - Add `https://your-domain.vercel.app/auth/callback` to allowed URLs
+   - See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed guide
+
+### Production Checklist
+
+Before deploying to production:
+
+- ✅ All migrations applied to Supabase
+- ✅ RLS policies enabled on all tables
+- ✅ Environment variables configured in Vercel
+- ✅ OAuth redirect URLs updated (if using Google/GitHub auth)
+- ✅ Custom domain configured (optional)
+- ✅ Local production build tested: `npm run build && npm run start`
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
 ## 🗄️ Database Setup
 
 The database schema is defined in `schema.sql`. To apply it to your Supabase project:

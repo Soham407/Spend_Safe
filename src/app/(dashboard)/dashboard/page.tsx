@@ -61,19 +61,33 @@ export default function DashboardPage() {
 
   // Fetch user data
   const [userEmail, setUserEmail] = useState("User");
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user?.email) {
-        setUserEmail(user.email);
-      } else {
-        // Double check auth state - middleware matches, but client check is safe
-        // router.push("/login");
+      try {
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+
+        if (error) {
+          console.error("Auth error:", error);
+          setAuthError(error.message);
+          return;
+        }
+
+        if (user?.email) {
+          setUserEmail(user.email);
+        } else {
+          // User not authenticated - middleware should have caught this
+          console.warn("No user found in authenticated route");
+        }
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+        setAuthError("Failed to load user data");
       }
     };
     fetchUser();

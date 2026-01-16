@@ -2,11 +2,25 @@
 // TRD Section 3: Calculate safe-to-spend estimate
 
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { getIncomeEventsWithAssumptions } from "@/features/income/actions";
 import { calculateSafeToSpend } from "@/features/estimates/calculator";
 
 export async function GET() {
   try {
+    // Authenticate user
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
     // Fetch all income events with assumptions
     const allEvents = await getIncomeEventsWithAssumptions();
 
