@@ -85,7 +85,7 @@ WHERE state IN ('pending', 'confirmed');
 CREATE INDEX idx_assumptions_income_event_latest ON assumptions(income_event_id, created_at DESC);
 -- ============================================================================
 -- Legacy pending_allocations table removed. State is managed on income_events.
-CREATE INDEX idx_pending_allocations_created_at ON pending_allocations(created_at);
+-- Legacy pending_allocations table removed. State is managed on income_events.
 -- ============================================================================
 -- REALITY CHECKS TABLE
 -- PRD Section 3.3: "Periodic Reality Check prompts require the user to acknowledge"

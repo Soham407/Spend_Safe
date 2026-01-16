@@ -5,11 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createIncomeEvent } from "@/domain/income/actions";
 import { calculateSafeToSpend } from "@/domain/estimates/calculator";
 import { getIncomeEventsWithAssumptions } from "@/domain/income/actions";
+import { z } from "zod";
 
 export async function GET() {
   try {
     const allEvents = await getIncomeEventsWithAssumptions();
-    
+
     const data = allEvents.map((e) => ({
       id: e.income_event.id,
       amount: e.income_event.amount,
@@ -23,7 +24,10 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching income events:", error);
     return NextResponse.json(
-      { success: false, error: error instanceof Error ? error.message : "Internal server error" },
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
       { status: 500 }
     );
   }
@@ -33,11 +37,23 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Parse date string to Date object
+    const createIncomeSchema = z.object({
+      amount: z.number().positive("Amount must be positive"),
+      event_date: z.string().refine((date) => !isNaN(Date.parse(date)), {
+        message: "Invalid date format",
+      }),
+      savings_rate: z
+        .number()
+        .min(0)
+        .max(1, "Savings rate must be between 0 and 1"),
+    });
+
+    const validated = createIncomeSchema.parse(body);
+
     const input = {
-      amount: parseFloat(body.amount),
-      event_date: new Date(body.event_date),
-      savings_rate: parseFloat(body.savings_rate),
+      amount: validated.amount.toString(),
+      event_date: new Date(validated.event_date),
+      savings_rate: validated.savings_rate.toString(),
     };
 
     // Create income event with pending assumption
@@ -84,4 +100,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

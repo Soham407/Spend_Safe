@@ -6,7 +6,7 @@ import { Target, History } from "lucide-react";
 import { COPY } from "@/copy/en";
 import { AssumptionState } from "@/domain/assumptions/types";
 
-interface PendingAllocationData {
+export interface PendingAllocationData {
   assumption: {
     id: string;
     income_event_id: string;
@@ -18,9 +18,9 @@ interface PendingAllocationData {
   income_event: {
     id: string;
     user_id: string;
-    amount: number;
+    amount: string | number;
     event_date: Date;
-    savings_rate: number;
+    savings_rate: string | number;
     created_at: Date;
     updated_at: Date;
   };
@@ -29,17 +29,26 @@ interface PendingAllocationData {
 interface AllocationListProps {
   refreshTrigger?: number;
   onUpdate?: () => void;
+  isPassiveMode?: boolean;
+  allocations?: PendingAllocationData[];
+  isDemoMode?: boolean;
 }
 
 export function PendingActionsSection({
   refreshTrigger,
   onUpdate,
+  isPassiveMode = false,
+  allocations: providedAllocations,
+  isDemoMode = false,
 }: AllocationListProps) {
-  const [allocations, setAllocations] = useState<PendingAllocationData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [allocations, setAllocations] = useState<PendingAllocationData[]>(
+    providedAllocations || []
+  );
+  const [isLoading, setIsLoading] = useState(!providedAllocations);
   const [internalRefresh, setInternalRefresh] = useState(0);
 
   const fetchAllocations = async () => {
+    if (providedAllocations) return;
     try {
       setIsLoading(true);
       const response = await fetch("/api/allocations/pending");
@@ -55,8 +64,13 @@ export function PendingActionsSection({
   };
 
   useEffect(() => {
-    fetchAllocations();
-  }, [refreshTrigger, internalRefresh]);
+    if (providedAllocations) {
+      setAllocations(providedAllocations);
+      setIsLoading(false);
+    } else {
+      fetchAllocations();
+    }
+  }, [refreshTrigger, internalRefresh, providedAllocations]);
 
   const handleItemUpdate = () => {
     setInternalRefresh((prev) => prev + 1);
@@ -91,13 +105,17 @@ export function PendingActionsSection({
             </p>
           </div>
         ) : (
-          allocations.slice(0, 3).map((alloc) => (
-            <AllocationCard
-              key={alloc.assumption.id}
-              allocation={alloc}
-              onUpdate={handleItemUpdate}
-            />
-          ))
+          allocations
+            .slice(0, 3)
+            .map((alloc) => (
+              <AllocationCard
+                key={alloc.assumption.id}
+                allocation={alloc}
+                onUpdate={handleItemUpdate}
+                isPassiveMode={isPassiveMode}
+                isDemoMode={isDemoMode}
+              />
+            ))
         )}
       </div>
     </div>
@@ -108,7 +126,7 @@ export function PendingActionsSection({
 interface RecentExecutionProps {
   events: Array<{
     id: string;
-    amount: number;
+    amount: string | number;
     event_date: Date;
     state: AssumptionState;
   }>;

@@ -34,36 +34,53 @@ export async function createIncomeEvent(
     throw new Error("Unauthorized");
   }
 
-  // Insert income event
-  const { data: incomeEvent, error: incomeError } = await supabase
-    .from("income_events")
-    .insert({
-      user_id: user.id,
-      amount: validated.amount,
-      event_date: validated.event_date.toISOString().split("T")[0], // YYYY-MM-DD
-      savings_rate: validated.savings_rate,
-    })
-    .select()
-    .single();
+  // Call atomic RPC function
+  // TRD: "All calculations must be... traceable to explicit user inputs"
+  // Using RPC ensures atomicity of Event + Assumption creation
+  const { data: rpcResult, error: rpcError } = await supabase.rpc(
+    "create_income_event_with_assumption",
+    {
+      p_user_id: user.id,
+      p_amount: validated.amount,
+      p_event_date: validated.event_date.toISOString().split("T")[0],
+      p_savings_rate: validated.savings_rate,
+    }
+  );
 
-  if (incomeError || !incomeEvent) {
-    throw new Error(`Failed to create income event: ${incomeError?.message}`);
+  if (rpcError) {
+    throw new Error(`Failed to create income event: ${rpcError.message}`);
   }
 
-  // Auto-create pending assumption
-  // TRD Section 2: "Assumption - Bound to a specific income event"
-  const { data: assumption, error: assumptionError } = await supabase
-    .from("assumptions")
-    .insert({
-      income_event_id: incomeEvent.id,
-      state: AssumptionState.PENDING,
-    })
-    .select()
+  // RPC returns an array (table), take the first item
+  const resultIds = Array.isArray(rpcResult) ? rpcResult[0] : rpcResult;
+
+  if (!resultIds || !resultIds.income_event_id || !resultIds.assumption_id) {
+    throw new Error("Failed to retrieve created IDs from RPC");
+  }
+
+  // Fetch the created full objects to return consistent types
+  // This is safer than constructing them from input because it includes DB-generated fields (created_at, etc.)
+  const { data: incomeEvent, error: incomeFetchError } = await supabase
+    .from("income_events")
+    .select("*")
+    .eq("id", resultIds.income_event_id)
     .single();
 
-  if (assumptionError || !assumption) {
+  if (incomeFetchError || !incomeEvent) {
     throw new Error(
-      `Failed to create assumption: ${assumptionError?.message}`
+      `Failed to fetch created income event: ${incomeFetchError?.message}`
+    );
+  }
+
+  const { data: assumption, error: assumptionFetchError } = await supabase
+    .from("assumptions")
+    .select("*")
+    .eq("id", resultIds.assumption_id)
+    .single();
+
+  if (assumptionFetchError || !assumption) {
+    throw new Error(
+      `Failed to fetch created assumption: ${assumptionFetchError?.message}`
     );
   }
 

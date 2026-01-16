@@ -1,4 +1,3 @@
-
 import { createClient } from "@/lib/supabase/server";
 import { Assumption, AssumptionState } from "./types";
 import { canTransitionTo } from "./logic";
@@ -45,9 +44,7 @@ export async function updateAssumptionState(
   // Validate state transition
   const currentState = currentAssumption.state as AssumptionState;
   if (!canTransitionTo(currentState, newState)) {
-    throw new Error(
-      `Invalid state transition: ${currentState} -> ${newState}`
-    );
+    throw new Error(`Invalid state transition: ${currentState} -> ${newState}`);
   }
 
   // Perform update
@@ -94,12 +91,14 @@ export async function getPendingAllocations(): Promise<PendingAllocation[]> {
   // RLS policies ensure we only get user's own data
   const { data, error } = await supabase
     .from("assumptions")
-    .select(`
+    .select(
+      `
       *,
       income_events!inner (
         *
       )
-    `)
+    `
+    )
     .eq("state", AssumptionState.PENDING)
     .order("created_at", { ascending: false });
 
@@ -109,7 +108,12 @@ export async function getPendingAllocations(): Promise<PendingAllocation[]> {
 
   if (!data) return [];
 
-  return data.map((item: any) => ({
+  // Define local type for the joined query result
+  type AssumptionWithIncome = Assumption & {
+    income_events: IncomeEvent;
+  };
+
+  return (data as unknown as AssumptionWithIncome[]).map((item) => ({
     assumption: {
       id: item.id,
       income_event_id: item.income_event_id,
