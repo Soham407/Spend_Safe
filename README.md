@@ -22,7 +22,7 @@ SpendSafe helps you estimate safe-to-spend funds after accounting for taxes and 
 
 ### Framework
 
-- **Next.js 15** (App Router)
+- **Next.js 16** (App Router)
 - **React 19**
 - **TypeScript**
 

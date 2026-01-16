@@ -254,33 +254,39 @@ export function PanicView({ refreshTrigger }: { refreshTrigger: number }) {
 
           {/* Mobile Cards */}
           <div className="md:hidden divide-y divide-slate-200">
-            {panicData.event_breakdown.map((event) => (
-              <div
-                key={event.income_event_id}
-                className="p-6 bg-white/40 space-y-3"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      {new Date(event.event_date).toLocaleDateString()}
-                    </p>
-                    <p className="text-xl font-black text-slate-800 mt-1">
-                      ${event.amount.toLocaleString()}
-                    </p>
-                  </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${getStateColor(
-                      event.state
-                    )}`}
-                  >
-                    {getStateLabel(event.state)}
-                  </span>
-                </div>
-                <p className="text-[10px] text-indigo-500 font-bold uppercase">
-                  Safe: ${event.safe_to_spend.toLocaleString()}
-                </p>
+            {panicData.event_breakdown.length === 0 ? (
+              <div className="py-20 text-center text-slate-400 font-bold italic">
+                {COPY.FLOW4.BREAKDOWN.EMPTY_STATE}
               </div>
-            ))}
+            ) : (
+              panicData.event_breakdown.map((event) => (
+                <div
+                  key={event.income_event_id}
+                  className="p-6 bg-white/40 space-y-3"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        {new Date(event.event_date).toLocaleDateString()}
+                      </p>
+                      <p className="text-xl font-black text-slate-800 mt-1">
+                        ${event.amount.toLocaleString()}
+                      </p>
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${getStateColor(
+                        event.state
+                      )}`}
+                    >
+                      {getStateLabel(event.state)}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-indigo-500 font-bold uppercase">
+                    Safe: ${event.safe_to_spend.toLocaleString()}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

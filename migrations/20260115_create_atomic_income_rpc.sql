@@ -11,7 +11,9 @@ CREATE OR REPLACE FUNCTION create_income_event_with_assumption(
 DECLARE v_income_id UUID;
 v_assumption_id UUID;
 BEGIN -- Security check: Ensure user can only create records for themselves
-IF p_user_id != auth.uid() THEN RAISE EXCEPTION 'Unauthorized: Cannot create income events for other users';
+-- Use IS DISTINCT FROM to handle NULL auth.uid() (unauthenticated users)
+IF p_user_id IS DISTINCT
+FROM auth.uid() THEN RAISE EXCEPTION 'Unauthorized: Cannot create income events for other users';
 END IF;
 -- Insert income event
 INSERT INTO income_events (user_id, amount, event_date, savings_rate)
